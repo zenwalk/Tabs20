@@ -4,6 +4,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
 import runSequence from 'run-sequence';
 import {stream as wiredep} from 'wiredep';
+const debug = require('gulp-debug');
 
 const $ = gulpLoadPlugins();
 
@@ -14,6 +15,7 @@ gulp.task('extras', () => {
     '!app/scripts.babel',
     '!app/*.json',
     '!app/*.html',
+    'app/scripts/inject.js'
   ], {
     base: 'app',
     dot: true
@@ -29,9 +31,12 @@ function lint(files, options) {
 }
 
 gulp.task('lint', lint('app/scripts.babel/**/*.js', {
-  env: {
-    es6: true
-  }
+  // env: {
+  //   es6: true
+  // }
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
 }));
 
 gulp.task('images', () => {
@@ -72,6 +77,7 @@ gulp.task('chromeManifest', () => {
         ]
       }
   }))
+  .pipe(debug({title: 'unicorn:'}))
   .pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
   .pipe($.if('*.js', $.sourcemaps.init()))
   .pipe($.if('*.js', $.uglify()))

@@ -55,3 +55,11 @@ document.getElementById('menu2').addEventListener('click', function menu2() {
 		chrome.tabs.remove(tabs_id);
 	});
 });
+
+document.getElementById('menu3').addEventListener('click', function menu3() {
+	chrome.tabs.executeScript({
+		file: 'scripts/inject.js'
+	}, (errs) => {
+		console.log(errs);
+	});
+});
